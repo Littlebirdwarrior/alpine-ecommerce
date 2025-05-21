@@ -6,35 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ma Boutique Alpine.js</title>
     <!-- Chargement des scripts et styles -->
-    <script defer src="node_modules/alpinejs/dist/cdn.min.js"></script>
+    <script defer src="/node_modules/alpinejs/dist/module.esm.js" type="module"></script>
     <script src="js/store.js"></script>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/dist/output.css">
 </head>
-<body>
+<body class="font-sans m-0 p-5">
     <!-- Conteneur principal avec le store Alpine.js -->
     <div x-data="store">
         <!-- En-tête avec titre et icône panier -->
-        <header>
-            <h1>Ma Boutique</h1>
+        <header class="flex justify-between items-center p-4 bg-gray-50">
+            <h1 class="text-2xl font-bold">Ma Boutique</h1>
             <!-- Icône panier avec compteur d'articles -->
-            <div class="cart-icon" @click="toggleCart()">
-                🛒 <span x-text="cartItemsCount" class="cart-count"></span>
+            <div class="relative cursor-pointer z-10 p-2.5" @click="toggleCart()">
+                🛒 <span x-text="cartItemsCount" class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full px-1.5 py-0.5 text-xs"></span>
             </div>
         </header>
 
         <main>
             <!-- Grille des produits -->
-            <div class="products">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 p-5">
                 <!-- Template pour l'affichage répété des produits -->
                 <template x-for="product in products">
                     <!-- Carte produit individuelle -->
-                    <div class="product-card">
-                        <img x-bind:src="product.image" x-bind:alt="product.name">
-                        <h3 x-text="product.name"></h3>
-                        <p x-text="product.price + ' €'"></p>
-                        <button @click="addToCart(product)">Ajouter au panier</button>
+                    <div class="border border-gray-200 p-4 text-center">
+                        <img x-bind:src="product.image" x-bind:alt="product.name" class="w-full h-auto">
+                        <h3 x-text="product.name" class="text-lg font-semibold mt-2"></h3>
+                        <p x-text="product.price + ' €'" class="text-gray-600"></p>
+                        <button @click="addToCart(product)" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition">
+                            Ajouter au panier
+                        </button>
                         <!-- Indicateur de présence dans le panier -->
-                        <span x-show="isInCart(product)" class="added-to-cart">
+                        <span x-show="isInCart(product)" class="block text-green-600 text-sm mt-2">
                             <span x-text="getProductCount(product)"></span> fois ajouté au panier
                         </span>
                     </div>
@@ -43,27 +45,36 @@
 
             <!-- Panneau latéral du panier avec animations -->
             <div x-show="isCartOpen" 
-                 x-transition:enter="slide-in"
-                 x-transition:leave="slide-out"
-                 class="cart-panel"
+                 x-transition:enter="transform transition-transform duration-300"
+                 x-transition:enter-start="translate-x-full"
+                 x-transition:enter-end="translate-x-0"
+                 x-transition:leave="transform transition-transform duration-300"
+                 x-transition:leave-start="translate-x-0"
+                 x-transition:leave-end="translate-x-full"
+                 class="fixed top-0 right-0 h-screen w-80 bg-white shadow-lg p-5 z-50"
                  @click.outside="isCartOpen = false">
                 <!-- En-tête du panier -->
-                <div class="cart-header">
-                    <h2>Mon Panier</h2>
-                    <button class="close-cart" @click="toggleCart()">&times;</button>
+                <div class="flex justify-between items-center mb-5">
+                    <h2 class="text-xl font-bold">Mon Panier</h2>
+                    <button class="text-2xl text-gray-600 hover:text-gray-800" @click="toggleCart()">&times;</button>
                 </div>
                 <!-- Liste des articles du panier -->
                 <template x-for="item in cart" :key="item.id">
-                    <div class="cart-item">
+                    <div class="flex justify-between items-center py-2 border-b">
                         <span x-text="item.name"></span>
-                        <span x-text="item.price + ' €'"></span>
-                        <button @click="removeFromCart(item)">Supprimer</button>
+                        <span x-text="item.price + ' €'" class="text-gray-600"></span>
+                        <button @click="removeFromCart(item)" class="text-red-500 hover:text-red-700">
+                            Supprimer
+                        </button>
                     </div>
                 </template>
                 <!-- Pied du panier avec total et bouton vider -->
-                <div class="cart-total">
-                    Total: <span x-text="cartTotal + ' €'"></span>
-                    <button class="clear-cart" @click="clearCart()" x-show="cart.length > 0">
+                <div class="mt-4">
+                    Total: <span x-text="cartTotal + ' €'" class="font-bold"></span>
+                    <button 
+                        @click="clearCart()" 
+                        x-show="cart.length > 0"
+                        class="w-full mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition">
                         Vider le panier
                     </button>
                 </div>
