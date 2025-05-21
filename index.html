@@ -1,42 +1,58 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <!-- Meta tags pour le responsive et l'encodage -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ma Boutique Alpine.js</title>
+    <!-- Chargement des scripts et styles -->
     <script defer src="node_modules/alpinejs/dist/cdn.min.js"></script>
     <script src="js/store.js"></script>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <!-- Conteneur principal avec le store Alpine.js -->
     <div x-data="store">
+        <!-- En-tête avec titre et icône panier -->
         <header>
             <h1>Ma Boutique</h1>
+            <!-- Icône panier avec compteur d'articles -->
             <div class="cart-icon" @click="toggleCart()">
                 🛒 <span x-text="cartItemsCount" class="cart-count"></span>
             </div>
         </header>
 
         <main>
-            <div class="products" :class="{ 'blur': isCartOpen }">
+            <!-- Grille des produits -->
+            <div class="products">
+                <!-- Template pour l'affichage répété des produits -->
                 <template x-for="product in products">
+                    <!-- Carte produit individuelle -->
                     <div class="product-card">
                         <img x-bind:src="product.image" x-bind:alt="product.name">
                         <h3 x-text="product.name"></h3>
                         <p x-text="product.price + ' €'"></p>
                         <button @click="addToCart(product)">Ajouter au panier</button>
+                        <!-- Indicateur de présence dans le panier -->
+                        <span x-show="isInCart(product)" class="added-to-cart">
+                            <span x-text="getProductCount(product)"></span> fois ajouté au panier
+                        </span>
                     </div>
                 </template>
             </div>
 
+            <!-- Panneau latéral du panier avec animations -->
             <div x-show="isCartOpen" 
                  x-transition:enter="slide-in"
                  x-transition:leave="slide-out"
-                 class="cart-panel">
+                 class="cart-panel"
+                 @click.outside="isCartOpen = false">
+                <!-- En-tête du panier -->
                 <div class="cart-header">
                     <h2>Mon Panier</h2>
                     <button class="close-cart" @click="toggleCart()">&times;</button>
                 </div>
+                <!-- Liste des articles du panier -->
                 <template x-for="item in cart" :key="item.id">
                     <div class="cart-item">
                         <span x-text="item.name"></span>
@@ -44,6 +60,7 @@
                         <button @click="removeFromCart(item)">Supprimer</button>
                     </div>
                 </template>
+                <!-- Pied du panier avec total et bouton vider -->
                 <div class="cart-total">
                     Total: <span x-text="cartTotal + ' €'"></span>
                     <button class="clear-cart" @click="clearCart()" x-show="cart.length > 0">
