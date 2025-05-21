@@ -8,7 +8,7 @@
     <!-- Chargement des scripts et styles -->
     <script defer src="/node_modules/alpinejs/dist/module.esm.js" type="module"></script>
     <script src="js/store.js"></script>
-    <link rel="stylesheet" href="/dist/output.css">
+    <link rel="stylesheet" href="/src/style.css">
 </head>
 <body class="font-sans m-0 p-5">
     <!-- Conteneur principal avec le store Alpine.js -->
@@ -45,36 +45,43 @@
 
             <!-- Panneau latéral du panier avec animations -->
             <div x-show="isCartOpen" 
-                 x-transition:enter="transform transition-transform duration-300"
+                 x-transition:enter="transform transition ease-out duration-300"
                  x-transition:enter-start="translate-x-full"
                  x-transition:enter-end="translate-x-0"
-                 x-transition:leave="transform transition-transform duration-300"
-                 x-transition:leave-start="translate-x-0"
-                 x-transition:leave-end="translate-x-full"
-                 class="fixed top-0 right-0 h-screen w-80 bg-white shadow-lg p-5 z-50"
-                 @click.outside="isCartOpen = false">
+                 @click.outside="isCartOpen = false"
+                 class="fixed top-0 right-0 h-screen w-80 bg-white shadow-lg p-5 z-50 overflow-y-auto">
+                
                 <!-- En-tête du panier -->
                 <div class="flex justify-between items-center mb-5">
                     <h2 class="text-xl font-bold">Mon Panier</h2>
                     <button class="text-2xl text-gray-600 hover:text-gray-800" @click="toggleCart()">&times;</button>
                 </div>
+
                 <!-- Liste des articles du panier -->
-                <template x-for="item in cart" :key="item.id">
-                    <div class="flex justify-between items-center py-2 border-b">
-                        <span x-text="item.name"></span>
-                        <span x-text="item.price + ' €'" class="text-gray-600"></span>
-                        <button @click="removeFromCart(item)" class="text-red-500 hover:text-red-700">
-                            Supprimer
-                        </button>
+                <div class="space-y-3">
+                    <template x-for="item in cart" :key="item.id">
+                        <div class="flex justify-between items-center py-2 border-b">
+                            <div class="flex-1">
+                                <span x-text="item.name"></span>
+                                <span x-text="item.price + ' €'" class="ml-2 text-gray-600"></span>
+                            </div>
+                            <button @click="removeFromCart(item)" class="text-red-500 hover:text-red-700">
+                                Supprimer
+                            </button>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Pied du panier -->
+                <div class="mt-4 pt-4 border-t">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="font-medium">Total:</span>
+                        <span x-text="cartTotal + ' €'" class="font-bold"></span>
                     </div>
-                </template>
-                <!-- Pied du panier avec total et bouton vider -->
-                <div class="mt-4">
-                    Total: <span x-text="cartTotal + ' €'" class="font-bold"></span>
                     <button 
                         @click="clearCart()" 
                         x-show="cart.length > 0"
-                        class="w-full mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition">
+                        class="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition">
                         Vider le panier
                     </button>
                 </div>
