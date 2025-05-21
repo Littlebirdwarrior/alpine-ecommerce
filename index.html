@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Boutique Alpine.js</title>
+    <script defer src="node_modules/alpinejs/dist/cdn.min.js"></script>
+    <script src="js/store.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div x-data="store">
+        <header>
+            <h1>Ma Boutique</h1>
+            <div class="cart-icon" @click="toggleCart()">
+                🛒 <span x-text="cartItemsCount" class="cart-count"></span>
+            </div>
+        </header>
+
+        <main>
+            <div class="products" :class="{ 'blur': isCartOpen }">
+                <template x-for="product in products">
+                    <div class="product-card">
+                        <img x-bind:src="product.image" x-bind:alt="product.name">
+                        <h3 x-text="product.name"></h3>
+                        <p x-text="product.price + ' €'"></p>
+                        <button @click="addToCart(product)">Ajouter au panier</button>
+                    </div>
+                </template>
+            </div>
+
+            <div x-show="isCartOpen" 
+                 x-transition:enter="slide-in"
+                 x-transition:leave="slide-out"
+                 class="cart-panel">
+                <div class="cart-header">
+                    <h2>Mon Panier</h2>
+                    <button class="close-cart" @click="toggleCart()">&times;</button>
+                </div>
+                <template x-for="item in cart" :key="item.id">
+                    <div class="cart-item">
+                        <span x-text="item.name"></span>
+                        <span x-text="item.price + ' €'"></span>
+                        <button @click="removeFromCart(item)">Supprimer</button>
+                    </div>
+                </template>
+                <div class="cart-total">
+                    Total: <span x-text="cartTotal + ' €'"></span>
+                    <button class="clear-cart" @click="clearCart()" x-show="cart.length > 0">
+                        Vider le panier
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
