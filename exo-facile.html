@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <head>
+            <!-- Meta tags pour le responsive et l'encodage -->
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Exo-facile Alpine</title>
+            <!-- Chargement des scripts et styles -->
+            <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        </head>
+         <body>
+            <main>
+                <h1>Exercice facile avec Alpine.js</h1>
+                <p>Utilisez Alpine.js pour créer une simple liste de tâches.</p>
+                
+                <section>
+                    <h2>Toggle simple</h2>
+                    <div x-data="{ open: false }">
+                        <button @click="open = !open">Afficher/Masquer</button>
+                        <p x-show="open">Coucou, je m'affiche</p>
+                    </div>
+                </section>
+                <section>
+                    <h2>Formulaire réactif</h2>
+                        <form>
+                            <label for="name">Nom:</label>
+                            <input type="text" id="name" name="name" x-model="name">
+                            <p>Bonjour, <span x-text="name"></span></p>
+                        </form>
+                </section>
+                <section>
+                    <h2>Liste dropdown</h2>
+                    <div>
+                        <button>Sélectionner une option</button>
+                        <ul>
+                            <li>Option 1</li>
+                            <li>Option 2</li>
+                            <li>Option 3</li>
+                        </ul>
+                </section>
+                <section>
+                    <h2>Onglet qui affiche un contenu différent</h2>
+                    <div>
+                        <button>Onglet 1</button>
+                        <button>Onglet 2</button>
+                        <div>
+                            <p>Contenu de l'onglet 1</p>
+                        </div>
+                        <div>
+                            <p>Contenu de l'onglet 2</p>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <
+                </section>
+            </main>
+         </body>
+    </head>
+</html>
+
+
+<style>
+
+</style>
