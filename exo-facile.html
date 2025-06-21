@@ -16,18 +16,29 @@
                 
                 <section>
                     <h2>Toggle simple</h2>
+                    <!-- x-data : crée un composant réactif -->
                     <div x-data="{ open: false }">
+                        <!-- x-on:click : ajoute un écouteur d'événement -->
                         <button @click="open = !open">Afficher/Masquer</button>
+                        <!-- x-show : affiche ou masque un élément -->
                         <p x-show="open">Coucou, je m'affiche</p>
                     </div>
                 </section>
                 <section>
                     <h2>Formulaire réactif</h2>
-                        <form>
-                            <label for="name">Nom:</label>
+                    <!-- J'initie mes données -->
+                    <div x-data="{ name: '', showMessage: false}">
+                        <!-- @submit.prevent : empêche le comportement par défaut du formulaire -->
+                        <form @submit.prevent="showMessage = true">
+                            <label for="name"> Donnez votre nom :</label>
+                            <!-- x-model : lie un élément model à un élément input -->
                             <input type="text" id="name" name="name" x-model="name">
-                            <p>Bonjour, <span x-text="name"></span></p>
+                            <button type="submit">Envoyer</button>
                         </form>
+                        <p x-show="showMessage">
+                            Bonjour, <span x-text="name"></span> !
+                        </p>
+                    </div>
                 </section>
                 <section>
                     <h2>Liste dropdown</h2>
