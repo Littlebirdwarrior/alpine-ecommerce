@@ -42,32 +42,68 @@
                 </section>
                 <section>
                     <h2>Liste dropdown</h2>
-                    <div>
-                        <button>Sélectionner une option</button>
-                        <ul>
-                            <li>Option 1</li>
-                            <li>Option 2</li>
-                            <li>Option 3</li>
+                    <!-- J'initie mes données avec un tableau pour utiliser un for -->
+                    <div x-data="{ 
+                            options: ['Option 1', 'Option 2', 'Option 3'], 
+                            option: '', 
+                            showOptions: false 
+                        }">
+                        <!-- au click on inverse la valeur de showOptions-->
+                        <button @click="showOptions = !showOptions">Choisir une option</button>
+
+                        <ul x-show="showOptions" x-transition @click.away="showOptions = false">
+
+                            <template x-for="item in options" :key="item">
+                                <li @click="option = item; showOptions = false" x-text="item"></li>
+                            </template>
                         </ul>
-                </section>
-                <section>
-                    <h2>Onglet qui affiche un contenu différent</h2>
-                    <div>
-                        <button>Onglet 1</button>
-                        <button>Onglet 2</button>
-                        <div>
-                            <p>Contenu de l'onglet 1</p>
-                        </div>
-                        <div>
-                            <p>Contenu de l'onglet 2</p>
-                        </div>
+                        <p>Vous avez sélectionné : <span x-text="option"></span></p>
                     </div>
                 </section>
                 <section>
-                    <
+                    <h2>Onglet qui affiche un contenu différent</h2>
+                    <div x-data="{ 
+                            // Tableau d'objets, chaque onglet a un id et une couleur associée
+                            tabs: [
+                                { id: 1, color: 'lightcoral' },
+                                { id: 2, color: 'lightblue' }
+                            ],
+                            activeTab: 1 // Onglet actif par défaut
+                        }">
+                        <template x-for="tab in tabs" :key="tab.id">
+                            <button @click="activeTab = tab.id">Onglet <span x-text="tab.id"></button>
+                        </template>
+                        <!-- x-show permet aussi de vérifier une condition tout en gardant l'éléments dans le DOM-->
+                        <template x-for="tab in tabs" :key="tab.id">                     
+                            <div 
+                                x-show="activeTab === tab.id"
+                                x-transition
+                                :style="width:fit-content;">
+                                <p :style="'width:fit-content; background-color:' + tab.color + '; padding:10px; margin-top:10px;'">
+                                    Je suis le contenu <span x-text="tab.id">
+                                </p>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+                <section>
+                    <h2>Liste des tâches</h2>
+                    <!-- j'initialise un tableau vide, et une methode pour y ajouter des données-->
+                    <form x-data="{ tasks: [], newTask: '' }" @submit.prevent="tasks.push(newTask); newTask = ''">
+                        <input type="text" x-model="newTask" placeholder="Ajouter une tâche">
+                        <button type="submit">Ajouter</button>
+                        <ul>
+                            <template x-for="(task, index) in tasks" :key="task">
+                                <li>
+                                    <span x-text="task"></span>
+                                    <!-- splice (index, 1), supprime 1 élément du tableau à la position index-->
+                                    <button @click="tasks.splice(index, 1)" style="margin-left:8px; color:red; cursor:pointer;">✗</button>
+                                </li>
+                            </template>
+                        </ul>
                 </section>
             </main>
-         </body>
+        </body>
     </head>
 </html>
 
