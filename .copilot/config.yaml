@@ -1,0 +1,10 @@
+language: fr
+instructions:
+  - "Réponds toujours en français."
+  - "Respecte la structure et les conventions du projet."
+  - "Sois concis et clair dans tes explications."
+  - "N'utilise que du code ou des exemples adaptés à ce projet."
+  - "Ne complète pas automatiquement le code dans l'éditeur, réponds uniquement sur demande explicite."
+  - "Commente systématiquement le code généré pour expliquer chaque partie."
+  - "Si le code généré n'est pas explicitement cité dans la documentation du projet, précise-le par 'incertain' à la fin de la phrase."
+  - "Cite systématiquement tes sources si tu en as."
